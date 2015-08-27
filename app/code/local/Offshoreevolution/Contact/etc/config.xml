@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Offshoreevolution_Contact>
+            <version>1.2.0</version>
+        </Offshoreevolution_Contact>
+    </modules>
+        
+	<global>
+		<models>
+			<contact>
+				<class>Offshoreevolution_Contact_Model</class>
+				<resourceModel>contact_mysql4</resourceModel>
+			</contact>
+			
+			<contact_mysql4>
+				<class>Offshoreevolution_Contact_Model_Mysql4</class>
+				<entities>
+					<settings>
+						<table>oepl_map_fields</table>
+					</settings>
+				</entities>
+			</contact_mysql4>
+		</models>
+		
+		<events>
+			<model_delete_before>
+				<observers>
+					<sugarcrm_sync>
+						<type>model</type>
+						<class>Offshoreevolution_Contact_Model_Observer</class>
+						<method>userDelete</method>
+					</sugarcrm_sync>
+				</observers>
+			</model_delete_before>
+			
+			<customer_address_save_after>
+				<observers>
+					<sugarcrm_sync>
+						<type>model</type>
+						<class>Offshoreevolution_Contact_Model_Observer</class>
+						<method>AddressSync</method>
+					</sugarcrm_sync>
+				</observers>
+			</customer_address_save_after>
+			
+			<customer_save_after>
+				<observers>
+					<sugarcrm_sync>
+						<type>model</type>
+						<class>Offshoreevolution_Contact_Model_Observer</class>
+						<method>userInsertUpdate</method>
+					</sugarcrm_sync>
+				</observers>
+			</customer_save_after>
+			
+			<sales_order_place_after>
+				<observers>
+					<sugarcrm_sync>
+						<type>singleton</type>
+						<class>Offshoreevolution_Contact_Model_Observer</class>
+						<method>guest_user_sync</method>
+					</sugarcrm_sync>
+				</observers>
+			</sales_order_place_after>		
+		</events>
+		
+        <helpers>
+	        <contact>
+	            <class>Offshoreevolution_Contact_Helper</class>
+	        </contact>
+	    </helpers> 
+		
+		<blocks>
+			<contact>
+				<class>Offshoreevolution_Contact_Block</class>
+			</contact>
+		</blocks>
+		
+		<resources>			
+			<sugarcrm_contact_setup>
+				<setup>
+					<module>Offshoreevolution_Contact</module>
+            		<class>Offshoreevolution_Contact_Model_Resource_Mysql4_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</sugarcrm_contact_setup>
+			
+			<contact_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</contact_write>
+			
+			<contact_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</contact_read>
+		</resources>
+    </global>
+	
+    <admin>
+        <routers>
+			<adminhtml>
+                <args>
+                    <modules>
+                        <offshoreevolution_contact after="Mage_Adminhtml">Offshoreevolution_Contact_Adminhtml</offshoreevolution_contact>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+	<adminhtml>
+        <layout>
+            <updates>
+                <offshoreevolution_contact>
+                    <file>offshoreevolution_contact.xml</file>
+                </offshoreevolution_contact>
+            </updates>
+        </layout>
+	</adminhtml>
+</config>

@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<config>
+    <menu>
+        <sugarcrm translate="title" module="contact">
+            <title>SugarCRM</title>
+            <sort_order>9999</sort_order>
+            <children>
+                <settings translate="title" module="contact">
+                    <title>SugarCRM Settings</title>
+                    <sort_order>10</sort_order>
+                    <action>adminhtml/sugarsetting</action>
+                </settings>
+				
+				<module_list translate="title" module="contact">
+                    <title>Contact Fields Mapping</title>
+                    <sort_order>11</sort_order>
+                    <action>adminhtml/fieldmapping</action>
+                </module_list>
+				
+				<user_operations translate="title" module="contact">
+                    <title>User Operations</title>
+                    <sort_order>12</sort_order>
+                    <action>adminhtml/sugarsetting/useroperations</action>
+                </user_operations>
+				
+            </children>
+        </sugarcrm>
+    </menu>
+	
+	<acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <sugarcrm_settings>
+                        <title>Sugarcrm settings</title>
+                        <sort_order>90</sort_order>
+                        <children>
+                            <form>
+                                <title>Form</title>
+                                <sort_order>10</sort_order>
+                            </form>
+                        </children>
+                    </sugarcrm_settings>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
