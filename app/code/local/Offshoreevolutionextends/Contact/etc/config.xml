@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Offshoreevolutionextends_Contact>
+            <version>0.1.0</version>
+        </Offshoreevolutionextends_Contact>
+    </modules>
+    
+    <global>
+        <blocks>
+            <contact>
+                <class>Offshoreevolutionextends_Contact_Block</class>
+            </contact>
+        </blocks>
+        <helpers>
+            <contact>
+                <class>Offshoreevolutionextends_Contact_Helper</class>
+            </contact>
+        </helpers>
+    </global>    
+</config>

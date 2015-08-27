@@ -1,4 +1,5 @@
 <?php
+
 $installer = $this;
 $installer->startSetup();
 
@@ -11,7 +12,7 @@ $installer->run('CREATE TABLE IF NOT EXISTS `oepl_sugar` (
 				  `meta_value` varchar(500) NOT NULL,
 				  PRIMARY KEY (`id`)
 				) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;');
-				  
+
 $installer->run('CREATE TABLE IF NOT EXISTS `oepl_sugar_map` (
 				  `id` int(11) NOT NULL AUTO_INCREMENT,
 				  `module` varchar(100) NOT NULL,
@@ -35,6 +36,6 @@ $installer->run("CREATE TABLE IF NOT EXISTS `oepl_map_fields` (
 				  `show_column` enum('1','2') NOT NULL DEFAULT '1',
 				  PRIMARY KEY (`pid`)
 				) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=72 ;");
-				  
+
 $installer->endSetup();
 ?>

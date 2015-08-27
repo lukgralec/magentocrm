@@ -11,13 +11,13 @@
                     <action>adminhtml/sugarsetting</action>
                 </settings>
 				
-				<module_list translate="title" module="contact">
+                <module_list translate="title" module="contact">
                     <title>Contact Fields Mapping</title>
                     <sort_order>11</sort_order>
                     <action>adminhtml/fieldmapping</action>
                 </module_list>
 				
-				<user_operations translate="title" module="contact">
+                <user_operations translate="title" module="contact">
                     <title>User Operations</title>
                     <sort_order>12</sort_order>
                     <action>adminhtml/sugarsetting/useroperations</action>
@@ -27,7 +27,7 @@
         </sugarcrm>
     </menu>
 	
-	<acl>
+    <acl>
         <resources>
             <all>
                 <title>Allow Everything</title>
