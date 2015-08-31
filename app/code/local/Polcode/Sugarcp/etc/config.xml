@@ -39,6 +39,14 @@
                     </sugarcp_observer>
                 </observers>
             </customer_delete_after>
+            <product_new_action>
+                <observers>
+                    <sugarcp_observer>
+                        <class>sugarcp/observer</class>
+                        <method>productSaved</method>
+                    </sugarcp_observer>
+                </observers>
+            </product_new_action>
         </events>
     </frontend>    
     <adminhtml>
@@ -59,6 +67,14 @@
                     </sugarcp_observer>
                 </observers>
             </customer_delete_after>
+             <catalog_product_save_after>
+                <observers>
+                    <sugarcp_observer>
+                        <class>sugarcp/observer</class>
+                        <method>productSaved</method>
+                    </sugarcp_observer>
+                </observers>
+            </catalog_product_save_after>
         </events>
         <acl>
             <resources>

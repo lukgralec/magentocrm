@@ -51,7 +51,44 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $this;
     }
+    //////////////////////////////////sunchronizuj product//////////////////////////
+    /**
+     * Synchronize product with SugarCRM
+     * @param  Mage_Customer_Model_Customer $customer
+     *  @return Polcode_Sugarcp_Helper_Data
+     */
+    public function synchronizeProduct($product) {
+        $this->init();
+        if (strlen($this->sessionId) > 0) {
+            $productId = $this->getProductID($product->getData('entity_id'));
 
+            $sugarId = Mage::getModel('sugarcp/sugarcrm')->syncSugarpro(
+                    $product, array(
+                'sessionId' => $this->sessionId,
+                'productId' => $productId
+                    )
+            );
+
+            //show messages only for admin
+            if (Mage::getSingleton('admin/session')->isLoggedIn() && $sugarId !== false && strlen($sugarId) == 36) {
+                if ($productId == false) {
+                    Mage::getSingleton('adminhtml/session')->addSuccess(
+                            $this->__('New Product was created in SugarCRM')
+                    );
+                } else {
+                    Mage::getSingleton('adminhtml/session')->addSuccess(
+                            $this->__('The Product info was updated in SugarCRM')
+                    );
+                }
+            }
+        }
+
+        return $this;
+    }
+    
+    
+    
+    /////////////////////////////////////////////////////////////////////////////////
     /**
      * Delete customer from SugarCRM
      * @param  string $email
@@ -136,6 +173,10 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
             $result = $entries->entry_list[0]->id;
         }
 
+        return $result;
+    }
+    private function getProductID(){
+        $result = false;
         return $result;
     }
 

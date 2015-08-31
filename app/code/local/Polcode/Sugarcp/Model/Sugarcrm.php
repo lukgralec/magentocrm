@@ -27,6 +27,22 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
 
         return $contactId;
     }
+        /**
+     * Synchronize Magento Product data with SugarCRM Product object
+     * @param  Mage_Customer_Model_Customer $customer
+     * @param  array $params
+     * @return Polcode_Sugarcp_Model_Sugarcrm
+     */
+    public function syncSugarpro($product, $params) {
+        $productId = $this->syncProduct($product, $params);
+
+        return $productId;
+    }
+
+    
+    
+    
+    
 
     /**
      * Delete Contact object from SugarCRM
@@ -135,6 +151,42 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
 
         return $result;
     }
+    
+    ////////////create new Product in SugarCRM/////////////////////////
+    
+        private function syncProduct($product, $params) {
+        $result = false;
+
+        //set Product properties
+        $productParams = array(
+            'session' => $params['sessionId'],
+            'module' => 'oqc_Product',
+            'name_value_list' => array(
+                0 => array(
+                    
+                    array('name' => 'name', 'value' => $product->getData('name')),
+                    array('name' => 'price', 'value' => $product->getData('price')),
+                    array('name' => 'svnumber', 'value' => $product->getData('sku')),
+                )
+            ),
+        );  
+        //if Product exists - we add Id into params to update info instead of creating new contact
+        if ($params['productId'] !== false) {
+            $productParams['name_value_list'][0][] = array('name' => 'id', 'value' => $params['productId']);
+        }
+
+        $requestResult = Mage::helper('sugarcp')->sendRequest('set_entries', $productParams);
+
+        if (isset($requestResult->ids) && isset($requestResult->ids[0])) {
+            $result = $requestResult->ids[0];
+        }
+
+        return $result;
+    }
+    
+    
+    
+    ////////////////////////////////////////////////////////////////////
 
     /**
      * Prepare array of Contact Address properties
