@@ -60,7 +60,7 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
     public function synchronizeProduct($product) {
         $this->init();
         if (strlen($this->sessionId) > 0) {
-            $productId = $this->getProductID($product->getData('entity_id'));
+            $productId = $this->getProductID($product->getData('sku'));
 
             $sugarId = Mage::getModel('sugarcp/sugarcrm')->syncSugarpro(
                     $product, array(
@@ -175,8 +175,12 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $result;
     }
-    private function getProductID(){
+    private function getAllProductsSvnumbers(){
         $result = false;
+        
+         $query = 'select svnumber from oqc_product ';
+         
+         
         return $result;
     }
 

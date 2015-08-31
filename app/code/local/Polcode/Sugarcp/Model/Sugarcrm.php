@@ -27,7 +27,8 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
 
         return $contactId;
     }
-        /**
+
+    /**
      * Synchronize Magento Product data with SugarCRM Product object
      * @param  Mage_Customer_Model_Customer $customer
      * @param  array $params
@@ -38,11 +39,6 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
 
         return $productId;
     }
-
-    
-    
-    
-    
 
     /**
      * Delete Contact object from SugarCRM
@@ -151,25 +147,35 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
 
         return $result;
     }
-    
+
     ////////////create new Product in SugarCRM/////////////////////////
-    
-        private function syncProduct($product, $params) {
+
+    private function syncProduct($product, $params) {
         $result = false;
 
+//////////////////////////getAllProductnamestoArray//////////////////////////////
+        $i = 0;
+        $dupa = array();
+        $collection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect(array('name', 'sku'));
+        foreach ($collection as $value) {
+            $arr = array($i => array(
+
+            array('name' => 'name', 'value' => $value['name']),
+            // array('name' => 'price', 'value' => $product->getData('price')),
+            array('name' => 'svnumber', 'value' => $value['sku']),
+            )
+            );
+            $i++;
+            $dupa = array_merge($dupa,$arr);
+        }
+
+        //////////////////////////////////////////////////////////      
         //set Product properties
         $productParams = array(
             'session' => $params['sessionId'],
             'module' => 'oqc_Product',
-            'name_value_list' => array(
-                0 => array(
-                    
-                    array('name' => 'name', 'value' => $product->getData('name')),
-                    array('name' => 'price', 'value' => $product->getData('price')),
-                    array('name' => 'svnumber', 'value' => $product->getData('sku')),
-                )
-            ),
-        );  
+            'name_value_list' => $dupa,
+        );
         //if Product exists - we add Id into params to update info instead of creating new contact
         if ($params['productId'] !== false) {
             $productParams['name_value_list'][0][] = array('name' => 'id', 'value' => $params['productId']);
@@ -183,9 +189,7 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
 
         return $result;
     }
-    
-    
-    
+
     ////////////////////////////////////////////////////////////////////
 
     /**
