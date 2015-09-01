@@ -35,7 +35,7 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
                     )
             );
 
-            //show messages only for admin
+//show messages only for admin
             if (Mage::getSingleton('admin/session')->isLoggedIn() && $sugarId !== false && strlen($sugarId) == 36) {
                 if ($contactId == false) {
                     Mage::getSingleton('adminhtml/session')->addSuccess(
@@ -51,44 +51,33 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $this;
     }
-    //////////////////////////////////sunchronizuj product//////////////////////////
+
+//////////////////////////////////sunchronizuj product//////////////////////////
     /**
      * Synchronize product with SugarCRM
-     * @param  Mage_Customer_Model_Customer $customer
+     * @param  Mage_Customer_Model_Customer $product
      *  @return Polcode_Sugarcp_Helper_Data
      */
-    public function synchronizeProduct($product) {
+    public function synchronizeProduct() {
         $this->init();
         if (strlen($this->sessionId) > 0) {
-            $productId = $this->getProductID($product->getData('sku'));
+       //     $productId = $this->getAllProductsSvnumbers();
 
             $sugarId = Mage::getModel('sugarcp/sugarcrm')->syncSugarpro(
-                    $product, array(
+                     array(
                 'sessionId' => $this->sessionId,
-                'productId' => $productId
+                    //'productId' => $productId
                     )
             );
 
-            //show messages only for admin
-            if (Mage::getSingleton('admin/session')->isLoggedIn() && $sugarId !== false && strlen($sugarId) == 36) {
-                if ($productId == false) {
-                    Mage::getSingleton('adminhtml/session')->addSuccess(
-                            $this->__('New Product was created in SugarCRM')
-                    );
-                } else {
-                    Mage::getSingleton('adminhtml/session')->addSuccess(
-                            $this->__('The Product info was updated in SugarCRM')
-                    );
-                }
-            }
+//show messages only for admin
         }
+
 
         return $this;
     }
-    
-    
-    
-    /////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
     /**
      * Delete customer from SugarCRM
      * @param  string $email
@@ -168,19 +157,26 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
         $params = array($this->sessionId, 'Contacts', $query, '', '', '', '', '');
         $entries = $this->sendRequest('get_entry_list', $params);
 
-        //if contact exist - get Id
+//if contact exist - get Id
         if ($entries !== false && isset($entries->entry_list) && count($entries->entry_list) == 1 && isset($entries->entry_list[0])) {
             $result = $entries->entry_list[0]->id;
         }
 
         return $result;
     }
-    private function getAllProductsSvnumbers(){
+
+    public function getProductId($sku) {
         $result = false;
+
+        $query = sprintf('svnumber = \'%s\'',$sku);
+        $params = array($this->sessionId, 'oqc_Product', $query, '', '', '', '', '');
+        $entries = $this->sendRequest('get_entry_list', $params);
+
+        if ($entries !== false && isset($entries->entry_list) && count($entries->entry_list) == 1 && isset($entries->entry_list[0])) {
+            $result = $entries->entry_list[0]->id;
+        }
+
         
-         $query = 'select svnumber from oqc_product ';
-         
-         
         return $result;
     }
 
@@ -204,6 +200,7 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
             }
         }
     }
+
     private function getSugarUrl() {
         return Mage::getStoreConfig(self::XML_PATH_SUGAR_URL);
     }

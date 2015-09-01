@@ -38,12 +38,11 @@ class Polcode_Sugarcp_Model_Observer {
      * @param Varien_Object $observer
      * @return Polcode_Sugarcp_Model_Observer
      */
-    public function productSaved($observer) {
+    public function productSaved() {
         if (Mage::getStoreConfigFlag(self::XML_PATH_ENABLED)) {
-            $product = $observer->getEvent()->getProduct();
-//            if (($product instanceof Mage_Catalog_Model_Product)) {
-                Mage::helper('sugarcp')->synchronizeProduct($product);
-//            }
+           // $product = $observer->getEvent()->getProduct();
+                Mage::helper('sugarcp')->synchronizeProduct();
+
         }
         return $this;
     }

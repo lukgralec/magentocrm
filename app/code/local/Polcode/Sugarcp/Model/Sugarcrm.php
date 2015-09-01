@@ -34,8 +34,8 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
      * @param  array $params
      * @return Polcode_Sugarcp_Model_Sugarcrm
      */
-    public function syncSugarpro($product, $params) {
-        $productId = $this->syncProduct($product, $params);
+    public function syncSugarpro( $params) {
+        $productId = $this->syncProduct( $params);
 
         return $productId;
     }
@@ -150,25 +150,48 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
 
     ////////////create new Product in SugarCRM/////////////////////////
 
-    private function syncProduct($product, $params) {
+    private function syncProduct($params) {
         $result = false;
 
 //////////////////////////getAllProductnamestoArray//////////////////////////////
         $i = 0;
         $dupa = array();
+        //$roko = array();
         $collection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect(array('name', 'sku'));
+
         foreach ($collection as $value) {
-            $arr = array($i => array(
+            $sku = $value['sku'];
+//              print_r($sku);
+//            echo '<br>';
+            $id = Mage::helper('sugarcp')->getProductId($sku);
+//            print_r($id);
+//            echo '<br>';
+            //  var_dump($id);
+            //    die('www');
+            if ($id !== false) {
 
-            array('name' => 'name', 'value' => $value['name']),
-            // array('name' => 'price', 'value' => $product->getData('price')),
-            array('name' => 'svnumber', 'value' => $value['sku']),
-            )
-            );
-            $i++;
-            $dupa = array_merge($dupa,$arr);
+                $arr = array($i => array(
+                        array('name' => 'id', 'value' => $id),
+                        array('name' => 'name', 'value' => $value['name']),
+                        // array('name' => 'price', 'value' => $product->getData('price')),
+                        array('name' => 'svnumber', 'value' => $value['sku']),
+                    )
+                );
+                $dupa = array_merge($dupa, $arr);
+                $i++;
+            } else {
+
+                $arr = array($i => array(
+                        array('name' => 'name', 'value' => $value['name']),
+                        // array('name' => 'price', 'value' => $product->getData('price')),
+                        array('name' => 'svnumber', 'value' => $value['sku']),
+                    )
+                );
+                $dupa = array_merge($dupa, $arr);
+                $i++;
+            }
         }
-
+        
         //////////////////////////////////////////////////////////      
         //set Product properties
         $productParams = array(
@@ -177,9 +200,10 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
             'name_value_list' => $dupa,
         );
         //if Product exists - we add Id into params to update info instead of creating new contact
-        if ($params['productId'] !== false) {
-            $productParams['name_value_list'][0][] = array('name' => 'id', 'value' => $params['productId']);
-        }
+        //     if ($params['productId'] !== false) {
+//            $productParams['name_value_list'][0][] = array('name' => 'id', 'value' => $params['productId']);
+//        }
+
 
         $requestResult = Mage::helper('sugarcp')->sendRequest('set_entries', $productParams);
 
