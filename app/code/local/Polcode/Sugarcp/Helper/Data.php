@@ -32,7 +32,6 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
                         'sessionId' => $this->sessionId,
                     )
             );
-
         }
 
         return $this;
@@ -66,14 +65,14 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
         $this->init();
 
         if (strlen($this->sessionId) > 0) {
-            
-                $sugarId = Mage::getModel('sugarcp/sugarcrm')->deleteFromSugarcrm(
-                        array(
-                            'sessionId' => $this->sessionId,
-                        )
-                );
-            }
-            return $this;
+
+            $sugarId = Mage::getModel('sugarcp/sugarcrm')->deleteFromSugarcrm(
+                    array(
+                        'sessionId' => $this->sessionId,
+                    )
+            );
+        }
+        return $this;
     }
 
     /**
@@ -177,12 +176,12 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
             array_push($email, $element);
         }
 
-       if ($entries !== false) {
+        if ($entries !== false) {
             $result = $email;
         }
         return $result;
     }
-    
+
     public function getCustomersEmailToArray() {
         $result = false;
         $emailArray = array();
@@ -194,10 +193,10 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
         if (!empty($emailArray)) {
             $result = $emailArray;
         }
-       
+
         return $result;
     }
-    
+
     public function getProductsSvnToArray() {
         $result = false;
 
@@ -232,6 +231,70 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $result;
     }
+
+    public function getProductFromSugarCrmToArray($sku) {
+
+        $result = false;
+
+        $query = sprintf('svnumber = \'%s\'', $sku);
+        $params = array($this->sessionId, 'oqc_Product', $query, '', '', '', '', '');
+        $entries = $this->sendRequest('get_entry_list', $params);
+
+//if product exist - get all magento
+        if ($entries !== false && isset($entries->entry_list) && count($entries->entry_list) == 1 && isset($entries->entry_list[0])) {
+            $result = array();
+        //    $result[] = $entries->entry_list[0]->id;
+            $result[] = $entries->entry_list[0]->name_value_list->name->value;
+            $result[] = $entries->entry_list[0]->name_value_list->svnumber->value;
+            $result[] = $entries->entry_list[0]->name_value_list->price->value;
+            
+//            $result[0] = $entries->entry_list[0]->id;
+//            $result[1] = $entries->entry_list[0]->name;
+//            $result[2] = $entries->entry_list[0]->price;
+//            $result[3] = $entries->entry_list[0]->svnumber;
+        }
+        
+        
+        //id ---- name ---- price --- svnumber
+//           var_dump($result);
+//            die;
+
+        return $result;
+    }
+    
+    
+        public function getCustomerFromSugarCrmToArray($email) {
+
+        $result = false;
+
+        $query = sprintf('contacts.id in (select eab.bean_id from email_addresses ea, email_addr_bean_rel eab where ea.email_address LIKE \'%s\' and eab.primary_address=1 and eab.email_address_id=ea.id and eab.bean_module=\'Contacts\' and ea.opt_out=0 and ea.deleted=0 and eab.deleted=0) and contacts.deleted=0', $email);
+        $params = array($this->sessionId, 'Contacts', $query, '', '', '', '', '');
+        $entries = $this->sendRequest('get_entry_list', $params);
+
+
+//if product exist - get all magento
+        if ($entries !== false && isset($entries->entry_list) && count($entries->entry_list) == 1 && isset($entries->entry_list[0])) {
+            $result = array();
+            $result[] = $entries->entry_list[0]->name_value_list->name->value;
+            $result[] = $entries->entry_list[0]->name_value_list->email1->value;
+//            $result[] = $entries->entry_list[0]->name_value_list->svnumber->value;
+//            $result[] = $entries->entry_list[0]->name_value_list->price->value;
+            
+//            $result[0] = $entries->entry_list[0]->id;
+//            $result[1] = $entries->entry_list[0]->name;
+//            $result[2] = $entries->entry_list[0]->price;
+//            $result[3] = $entries->entry_list[0]->svnumber;
+        }
+        
+        
+        //id ---- name ---- price --- svnumber
+         
+
+        return $result;
+    }
+    
+    
+    
 
     /**
      * Init function: login into Sugar, etc.
