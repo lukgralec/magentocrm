@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CustomersIntoSugarCrm Data Helper
+ * Sugarcp Data Helper
  *
  * @category    Polcode
  * @package     Polcode_Sugarcp
@@ -18,46 +18,45 @@ class Polcode_Sugarcp_Model_Observer {
         parent::__construct();
     }
 
-    /**
-     * Customer save handler
-     * @param Varien_Object $observer
-     * @return Polcode_Sugarcp_Model_Observer
-     */
-    public function customerSaved($observer) {
+ 
+    public function customerSaved() {
         if (Mage::getStoreConfigFlag(self::XML_PATH_ENABLED)) {
-            $customer = $observer->getEvent()->getCustomer();
-            if (($customer instanceof Mage_Customer_Model_Customer)) {
-                Mage::helper('sugarcp')->synchronizeCustomer($customer);
+                Mage::helper('sugarcp')->synchronizeCustomer();
             }
-        }
+        
         return $this;
     }
 
-    /**
-     * Product save handler
-     * @param Varien_Object $observer
-     * @return Polcode_Sugarcp_Model_Observer
-     */
+  
     public function productSaved() {
         if (Mage::getStoreConfigFlag(self::XML_PATH_ENABLED)) {
-           // $product = $observer->getEvent()->getProduct();
                 Mage::helper('sugarcp')->synchronizeProduct();
 
         }
         return $this;
     }
 
-    /**
-     * Customer delete handler
-     * @param Varien_Object $observer
-     * @return Polcode_Sugarcp_Model_Observer
-     */
-    public function customerDeleted($observer) {
+
+    public function customerDeleted() {
         if (Mage::getStoreConfigFlag(self::XML_PATH_ENABLED)) {
-            Mage::helper('sugarcp')->deleteCustomer($observer->getEvent()->getCustomer()->getEmail());
+            Mage::helper('sugarcp')->deleteCustomer();
         }
 
         return $this;
     }
+    
+   
+     public function productDeleted() {
+         
+         Mage::log('productDeleted');
+         
+        if (Mage::getStoreConfigFlag(self::XML_PATH_ENABLED)) {
+            Mage::helper('sugarcp')->deleteProduct();
+        }
+
+        return $this;
+    }
+    
+    
 
 }

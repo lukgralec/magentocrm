@@ -20,62 +20,8 @@
                 <class>Polcode_Sugarcp_Model</class>
             </sugarcp>
         </models>
-    </global>
-    <frontend>
-        <events>
-            <customer_save_after>
-                <observers>
-                    <sugarcp_observer>
-                        <class>sugarcp/observer</class>
-                        <method>customerSaved</method>
-                    </sugarcp_observer>
-                </observers>
-            </customer_save_after>
-            <customer_delete_after>
-                <observers>
-                    <sugarcp_observer>
-                        <class>sugarcp/observer</class>
-                        <method>customerDeleted</method>
-                    </sugarcp_observer>
-                </observers>
-            </customer_delete_after>
-<!--            <product_new_action>
-                <observers>
-                    <sugarcp_observer>
-                        <class>sugarcp/observer</class>
-                        <method>productSaved</method>
-                    </sugarcp_observer>
-                </observers>
-            </product_new_action>-->
-        </events>
-    </frontend>    
+    </global> 
     <adminhtml>
-        <events>
-            <customer_save_after>
-                <observers>
-                    <sugarcp_observer>
-                        <class>sugarcp/observer</class>
-                        <method>customerSaved</method>
-                    </sugarcp_observer>
-                </observers>
-            </customer_save_after>
-            <customer_delete_after>
-                <observers>
-                    <sugarcp_observer>
-                        <class>sugarcp/observer</class>
-                        <method>customerDeleted</method>
-                    </sugarcp_observer>
-                </observers>
-            </customer_delete_after>
-<!--             <catalog_product_save_after>
-                <observers>
-                    <sugarcp_observer>
-                        <class>sugarcp/observer</class>
-                        <method>productSaved</method>
-                    </sugarcp_observer>
-                </observers>
-            </catalog_product_save_after>-->
-        </events>
         <acl>
             <resources>
                 <admin>
@@ -100,12 +46,36 @@
         <jobs>
             <my_cron>
                 <schedule>
-                    <cron_expr>*/1 * * * *</cron_expr>
+                    <cron_expr>* * */1 * *</cron_expr>
                 </schedule>
                 <run>
                     <model>sugarcp/observer::productSaved</model>
                 </run>
             </my_cron>
+            <deleteProduct>
+                <schedule>
+                    <cron_expr>* * */1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sugarcp/observer::productDeleted</model>
+                </run>
+            </deleteProduct>
+              <saveCustomer>
+                <schedule>
+                    <cron_expr>* * */1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sugarcp/observer::customerSaved</model>
+                </run>
+            </saveCustomer>
+            <deleteCustomer>
+                <schedule>
+                    <cron_expr>* * */1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sugarcp/observer::customerDeleted</model>
+                </run>
+            </deleteCustomer>
         </jobs>
     </crontab>
 </config>
