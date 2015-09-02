@@ -243,21 +243,13 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
 //if product exist - get all magento
         if ($entries !== false && isset($entries->entry_list) && count($entries->entry_list) == 1 && isset($entries->entry_list[0])) {
             $result = array();
-        //    $result[] = $entries->entry_list[0]->id;
+  
             $result[] = $entries->entry_list[0]->name_value_list->name->value;
             $result[] = $entries->entry_list[0]->name_value_list->svnumber->value;
             $result[] = $entries->entry_list[0]->name_value_list->price->value;
-            
-//            $result[0] = $entries->entry_list[0]->id;
-//            $result[1] = $entries->entry_list[0]->name;
-//            $result[2] = $entries->entry_list[0]->price;
-//            $result[3] = $entries->entry_list[0]->svnumber;
+
         }
         
-        
-        //id ---- name ---- price --- svnumber
-//           var_dump($result);
-//            die;
 
         return $result;
     }
@@ -277,18 +269,7 @@ class Polcode_Sugarcp_Helper_Data extends Mage_Core_Helper_Abstract {
             $result = array();
             $result[] = $entries->entry_list[0]->name_value_list->name->value;
             $result[] = $entries->entry_list[0]->name_value_list->email1->value;
-//            $result[] = $entries->entry_list[0]->name_value_list->svnumber->value;
-//            $result[] = $entries->entry_list[0]->name_value_list->price->value;
-            
-//            $result[0] = $entries->entry_list[0]->id;
-//            $result[1] = $entries->entry_list[0]->name;
-//            $result[2] = $entries->entry_list[0]->price;
-//            $result[3] = $entries->entry_list[0]->svnumber;
         }
-        
-        
-        //id ---- name ---- price --- svnumber
-         
 
         return $result;
     }

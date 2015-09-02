@@ -234,9 +234,6 @@ class Polcode_Sugarcp_Model_Sugarcrm extends Mage_Core_Model_Abstract {
             $id = Mage::helper('sugarcp')->getProductId($sku);
             $productFromSugar = Mage::helper('sugarcp')->getProductFromSugarCrmToArray($sku);
 
-//            var_dump($productFromMagento);
-//            var_dump($productFromSugar);
-//            die;
             if ($productFromMagento != $productFromSugar) {
                 if ($id !== false) {
 

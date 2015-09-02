@@ -56,16 +56,7 @@ class Polcode_Sugarcp_Model_Observer {
 
         return $this;
     }
-     public function customerTest() {
-         
-         
-         
-        if (Mage::getStoreConfigFlag(self::XML_PATH_ENABLED)) {
-            Mage::helper('sugarcp')->synchronizeCustomer();
-        }
-
-        return $this;
-    }
+    
     
     
 
